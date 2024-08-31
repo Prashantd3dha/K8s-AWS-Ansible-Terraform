@@ -1,11 +1,11 @@
-variable "vpc_cidr" {
+variable "shared_credential" {
   type        = string
-  description = "Public VPC CIDR values"
-  default     = "10.0.0.0/16"
+  description = "AWS credtional file location"
+  default     = "C:/Users/hp/.aws/credentials"
 }
 
-variable "vpc_subnet_cidr" {
+variable "shared_config" {
   type        = string
-  description = "Public Subnet CIDR values"
-  default     = "10.0.0.0/16"
+  description = "AWS config file location"
+  default     = "C:/Users/hp/.aws/conf"
 }
