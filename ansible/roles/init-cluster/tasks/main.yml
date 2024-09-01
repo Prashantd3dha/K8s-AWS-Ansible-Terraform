@@ -1,0 +1,38 @@
+---
+# Initializing Cluster with kubeadm
+- name: Create cluster
+  command: kubeadm init --pod-network-cidr=192.168.0.0/16
+  register: init_cluster
+
+- name: Create .kube directory
+  file:
+    path: "/home/ec2-user/.kube"
+    state: directory
+    mode: '0755'
+
+- name: Copy Kubernetes admin config to .kube directory
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: "/home/ec2-user/.kube/config"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+    mode: '0755'
+    remote_src: true
+
+# Installing a Pod network add-on
+- name: Apply Calico Tigera Operator manifest
+  command: kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
+
+# Creating join token
+- name: create join token
+  command: sudo kubeadm token create --print-join-command
+  register: join_token
+
+- name: Debug join_token
+  debug:
+    msg: "{{ join_token.stdout }}"
+
+- name: Set join token fact
+  set_fact:
+    join_token_out: "{{ join_token.stdout }}"
+  

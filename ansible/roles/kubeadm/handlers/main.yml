@@ -1,0 +1,4 @@
+---
+# handlers file for roles/kubeadm
+- name: SELinus
+  command: sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
